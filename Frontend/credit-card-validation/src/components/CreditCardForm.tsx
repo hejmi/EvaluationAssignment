@@ -13,6 +13,7 @@ import {
 import { Button } from './ui/button'
 import { useState } from 'react'
 import creditCardType from 'credit-card-type'
+import CreditCard from './CreditCard'
 
 const cardSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
@@ -30,23 +31,27 @@ type CardData = z.infer<typeof cardSchema>
 
 export default function CreditCardForm() {
 	const {
-		register,
 		handleSubmit,
 		setValue,
-		getValues,
 		trigger,
+		watch,
 		formState: { errors },
 	} = useForm<CardData>({
 		resolver: zodResolver(cardSchema),
 	})
 
-	const [cardType, setCardType] = useState<string | null>(null)
+	const [cardType, setCardType] = useState<string>('')
 
-	const handleCardInput = (val: string) => {
+	const creditCardName = watch('name')
+	const creditCardNumber = watch('number')
+	const creditCardExpiry = watch('expiry')
+	const creditCardCvv = watch('cvv')
+
+	const handleCardNumberInput = (val: string) => {
 		setValue('number', val)
 		const cleanNumber = val.replace(/\s/g, '')
 		const types = creditCardType(cleanNumber)
-		setCardType(types.length ? types[0].niceType : null)
+		setCardType(types.length ? types[0].niceType : '')
 	}
 
 	const onSubmit: SubmitHandler<CardData> = (data) => {
@@ -54,12 +59,7 @@ export default function CreditCardForm() {
 	}
 
 	return (
-		<>
-			<div className="">
-				{cardType && getValues('number')?.length > 0 && (
-					<p className="text-sm font-bold ml-1 p-2 text-gray-500">{cardType}</p>
-				)}
-			</div>
+		<div className="flex flex-row gap-5">
 			<Card className="w-[350px]">
 				<CardHeader>
 					<CardTitle className="text-2xl">Pay with credit card</CardTitle>
@@ -68,11 +68,20 @@ export default function CreditCardForm() {
 				<CardContent>
 					<form>
 						<div className="mb-4 mt-4">
-							<input
-								type="text"
+							<IMaskInput
+								mask={/^[a-zA-Z\s'-]*$/}
 								className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Name on Card"
-								{...register('name')}
+								onAccept={(value: string) => {
+									setValue('name', value, {
+										shouldDirty: true,
+										shouldTouch: true,
+									})
+								}}
+								onBlur={(event) => {
+									setValue('name', event.target.value)
+									trigger('name')
+								}}
 							/>
 							{errors.name && (
 								<span className="text-red-500 text-xs ml-2 pb-4">
@@ -85,7 +94,7 @@ export default function CreditCardForm() {
 								mask="0000 0000 0000 0000"
 								className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Card Number"
-								onAccept={handleCardInput}
+								onAccept={handleCardNumberInput}
 								onBlur={(event) => {
 									setValue('number', event.target.value)
 									trigger('number')
@@ -100,6 +109,12 @@ export default function CreditCardForm() {
 						<div className="mb-4 mt-4 grid grid-cols-2 gap-x-4">
 							<IMaskInput
 								mask={'00/00'}
+								onAccept={(value: string) => {
+									setValue('expiry', value, {
+										shouldDirty: true,
+										shouldTouch: true,
+									})
+								}}
 								onBlur={(event) => {
 									setValue('expiry', event.target.value)
 									trigger('expiry')
@@ -109,6 +124,12 @@ export default function CreditCardForm() {
 							/>
 							<IMaskInput
 								mask={'000'}
+								onAccept={(value: string) => {
+									setValue('cvv', value, {
+										shouldDirty: true,
+										shouldTouch: true,
+									})
+								}}
 								onBlur={(event) => {
 									setValue('cvv', event.target.value)
 									trigger('cvv')
@@ -132,6 +153,15 @@ export default function CreditCardForm() {
 					</form>
 				</CardContent>
 			</Card>
-		</>
+			<div className="flex top-0 items-start">
+				<CreditCard
+					name={creditCardName}
+					number={creditCardNumber}
+					expiry={creditCardExpiry}
+					cvv={creditCardCvv}
+					cardType={cardType}
+				/>
+			</div>
+		</div>
 	)
 }
