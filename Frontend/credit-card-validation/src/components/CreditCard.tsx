@@ -36,7 +36,7 @@ const maskCardNumber = (input: string): string => {
 
 	for (let i = 4; i < cleanedInput.length && i < 12; i++) {
 		if (i % 4 === 0 && i !== 4) masked += ' '
-		masked += '*'
+		masked += '#'
 	}
 	const last4 = cleanedInput.slice(12, cleanedInput.length)
 
@@ -83,8 +83,10 @@ export default function CreditCard({
 					</div>
 
 					<div className="flex justify-between">
-						<div className="text-sm font-mono text-black">
-							{name?.toUpperCase()}
+						<div className="text-xs font-mono text-black">
+							{name?.toUpperCase().length > 32
+								? name?.toUpperCase().substring(0, 32) + '...'
+								: name?.toUpperCase()}
 						</div>
 						<div className="text-sm font-mono text-black">
 							{cvv?.replace(/./g, '*')}
