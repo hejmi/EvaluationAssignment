@@ -89,7 +89,7 @@ export default function CreditCard({
 								: name?.toUpperCase()}
 						</div>
 						<div className="text-sm font-mono text-black">
-							{cvv?.replace(/./g, '*')}
+							{cvv?.replace(/./g, '#')}
 						</div>
 					</div>
 				</div>
