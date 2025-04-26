@@ -202,6 +202,7 @@ export default function CreditCardForm() {
 									mask={/^[a-zA-Z\s'-]*$/}
 									className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Name on Card"
+									data-testid="name-input"
 									onAccept={(value: string) => {
 										setValue('name', value)
 									}}
@@ -221,6 +222,7 @@ export default function CreditCardForm() {
 									mask="0000 0000 0000 0000"
 									className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Card Number"
+									data-testid="card-number-input"
 									onAccept={handleCardNumberInput}
 									onBlur={(event) => {
 										setValue('number', event.target.value)
@@ -237,6 +239,7 @@ export default function CreditCardForm() {
 							<div className="mb-4 mt-4 grid grid-cols-2 gap-x-4">
 								<IMaskInput
 									mask={'00/00'}
+									data-testid="expiry-input"
 									onAccept={(value: string) => {
 										setValue('expiry', value)
 									}}
@@ -250,6 +253,7 @@ export default function CreditCardForm() {
 								<IMaskInput
 									mask={'000'}
 									type="password"
+									data-testid="cvv-input"
 									onAccept={(value: string) => {
 										setValue('cvv', value)
 									}}
@@ -271,7 +275,11 @@ export default function CreditCardForm() {
 							</div>
 							<CardFooter className="flex justify-between p-0">
 								<Button variant="outline">Cancel</Button>
-								<Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+								<Button
+									onClick={handleSubmit(onSubmit)}
+									data-testid="card-submit-button">
+									Submit
+								</Button>
 							</CardFooter>
 						</form>
 					</CardContent>
