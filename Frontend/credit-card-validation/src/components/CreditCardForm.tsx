@@ -62,6 +62,7 @@ export default function CreditCardForm() {
 
 	const [cardType, setCardType] = useState<string>('')
 	const [cardValidation, setCardValidation] = useState<validationI | null>(null)
+	const [showValidationDialog, setShowValidationDialog] = useState(false)
 
 	const creditCardName = watch('name')
 	const creditCardNumber = watch('number')
@@ -93,14 +94,17 @@ export default function CreditCardForm() {
 			cvv: valid.cvv(cvv),
 			cardHolderName: valid.cardholderName(name),
 		})
+		setShowValidationDialog(true)
 	}
 
 	return (
 		<>
 			<Dialog
 				modal={false}
-				open={cardValidation !== null}
-				onOpenChange={() => setCardValidation(null)}>
+				open={showValidationDialog}
+				onOpenChange={(isOpen) => {
+					setShowValidationDialog(isOpen)
+				}}>
 				<DialogContent className="sm:max-w-[305px] bg-white justify-center">
 					<DialogHeader className="justify-center items-center">
 						<DialogTitle>Card Validation</DialogTitle>
@@ -167,7 +171,9 @@ export default function CreditCardForm() {
 						</div>
 					</DialogHeader>
 					<DialogFooter>
-						<Button onClick={() => setCardValidation(null)}>Close</Button>
+						<Button onClick={() => setShowValidationDialog(false)}>
+							Close
+						</Button>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
