@@ -114,35 +114,35 @@ export default function CreditCardForm() {
 						</DialogDescription>
 						<div className="flex mt-5 justify-start self-start items-center gap-4">
 							{cardValidation?.cardHolderName.isValid ? (
-								<PiCheckBold color="green" />
+								<PiCheckBold color="green" data-test="valid-card-name" />
 							) : (
-								<PiX color="red" />
+								<PiX color="red" data-test="invalid-card-name" />
 							)}
 							Card Holder Name
 						</div>
 						<div className="flex justify-start self-start items-center gap-4">
 							{cardValidation?.number.isValid ? (
-								<PiCheckBold color="green" />
+								<PiCheckBold color="green" data-test="valid-card-number" />
 							) : (
-								<PiX color="red" />
+								<PiX color="red" data-test="invalid-card-number" />
 							)}
 							Card Number
 						</div>
 						<div className="flex justify-start self-start items-center gap-4">
 							{cardValidation?.expiryMonth.isValid &&
 							cardValidation?.expiryYear.isValid ? (
-								<PiCheckBold color="green" />
+								<PiCheckBold color="green" data-test="valid-expiry" />
 							) : (
-								<PiX color="red" />
+								<PiX color="red" data-test="invalid-expiry" />
 							)}
 							Expiry
 						</div>
 
 						<div className="flex justify-start self-start items-center gap-4">
 							{cardValidation?.cvv.isValid ? (
-								<PiCheckBold color="green" />
+								<PiCheckBold color="green" data-test="valid-cvv" />
 							) : (
-								<PiX color="red" />
+								<PiX color="red" data-test="invalid-cvv" />
 							)}
 							CVV
 						</div>
@@ -203,6 +203,7 @@ export default function CreditCardForm() {
 									className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Name on Card"
 									data-testid="name-input"
+									data-test="name-input"
 									onAccept={(value: string) => {
 										setValue('name', value)
 									}}
@@ -223,6 +224,7 @@ export default function CreditCardForm() {
 									className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="Card Number"
 									data-testid="card-number-input"
+									data-test="card-number-input"
 									onAccept={handleCardNumberInput}
 									onBlur={(event) => {
 										setValue('number', event.target.value)
@@ -240,6 +242,7 @@ export default function CreditCardForm() {
 								<IMaskInput
 									mask={'00/00'}
 									data-testid="expiry-input"
+									data-test="expiry-input"
 									onAccept={(value: string) => {
 										setValue('expiry', value)
 									}}
@@ -254,6 +257,7 @@ export default function CreditCardForm() {
 									mask={'000'}
 									type="password"
 									data-testid="cvv-input"
+									data-test="cvv-input"
 									onAccept={(value: string) => {
 										setValue('cvv', value)
 									}}

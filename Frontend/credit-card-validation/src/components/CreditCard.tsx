@@ -68,7 +68,11 @@ export default function CreditCard({
 
 			<div className="absolute inset-0 p-6 pt-3 flex flex-col ml-3">
 				<div className="justify-items-end">
-					<Icon size={48} />
+					<Icon
+						size={48}
+						data-test="card-type-icon"
+						data-icon={cardType.toLowerCase() || 'unknown'}
+					/>
 				</div>
 				<div className="w-full max-w-sm">
 					<div className="items-center mt-15 h-10">
